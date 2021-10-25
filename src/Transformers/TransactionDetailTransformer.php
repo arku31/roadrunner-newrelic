@@ -27,4 +27,19 @@ final class TransactionDetailTransformer implements TransactionDetailTransformer
         }
         return $transformed;
     }
+
+    public function transformThrowable(\Throwable $throwable): array
+    {
+        $data[] = implode(':', [
+            self::THROWABLE_MESSAGE, $throwable->getMessage()
+        ]);
+        $data[] = implode(':', [
+            self::THROWABLE_CLASS, $throwable->getFile()
+        ]);
+        $data[] = implode(':', [
+            self::THROWABLE_STACKTRACE, $throwable->getTraceAsString()
+        ]);
+
+        return $data;
+    }
 }

@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Arku\Newrelic\Transactions;
 
+use Throwable;
+
 final class TransactionDetail implements TransactionDetailInterface
 {
     private array $data;
     private array $segments = [];
+    private ?Throwable $throwable = null;
 
     public function __construct(array $data = [])
     {
@@ -46,6 +49,17 @@ final class TransactionDetail implements TransactionDetailInterface
     public function getSegments(): array
     {
         return $this->segments;
+    }
+
+    public function setThrowable(Throwable $throwable): self
+    {
+        $this->throwable = $throwable;
+        return $this;
+    }
+
+    public function getThrowable(): ?Throwable
+    {
+        return $this->throwable;
     }
 
 }

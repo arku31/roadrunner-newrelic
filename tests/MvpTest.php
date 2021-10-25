@@ -44,7 +44,5 @@ final class MvpTest extends TestCase
             'duration:1000',
             'testmetakey:testmetavalue'
         ], $headers['nr_segment1']);
-
-
     }
 }
