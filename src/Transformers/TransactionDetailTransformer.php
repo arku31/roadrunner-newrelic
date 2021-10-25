@@ -3,7 +3,6 @@
 declare(strict_types=1);
 namespace Arku\Newrelic\Transformers;
 
-
 use Arku\Newrelic\Transactions\SegmentInterface;
 use Arku\Newrelic\Transactions\TransactionDetailInterface;
 
@@ -36,8 +35,11 @@ final class TransactionDetailTransformer implements TransactionDetailTransformer
         $data[] = implode(':', [
             self::THROWABLE_CLASS, $throwable->getFile()
         ]);
+        $traceAsString = $throwable->getTraceAsString();
+        $traceAsString = str_replace(PHP_EOL, ' ', $traceAsString); //headers cannot contain "\n"
         $data[] = implode(':', [
-            self::THROWABLE_STACKTRACE, $throwable->getTraceAsString()
+            self::THROWABLE_STACKTRACE,
+            $traceAsString
         ]);
 
         return $data;

@@ -11,7 +11,7 @@ use Arku\Newrelic\Transformers\TransactionDetailTransformer;
 use Nyholm\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 
-final class MvpTest extends TestCase
+final class SimpleTransactionTest extends TestCase
 {
     public function testMvp()
     {

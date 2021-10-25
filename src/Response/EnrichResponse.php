@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Arku\Newrelic\Response;
 
-use Arku\Newrelic\Transactions\TransactionDetail;
 use Arku\Newrelic\Transactions\TransactionDetailInterface;
-use Arku\Newrelic\Transformers\TransactionDetailTransformer;
 use Arku\Newrelic\Transformers\TransactionDetailTransformerInterface;
 use Psr\Http\Message\MessageInterface;
 
@@ -23,6 +21,11 @@ final class EnrichResponse implements EnrichResponseInterface
 
     public function enrich(MessageInterface $response, TransactionDetailInterface $transactionDetail): MessageInterface
     {
+        if ($throwable = $transactionDetail->getThrowable()) {
+            $throwableData = $this->transformer->transformThrowable($throwable);
+            return $response->withHeader(self::ERROR_RR_REPORTING, $throwableData);
+        }
+
         $response =  $response->withHeader(self::MAIN_RR_HEADER, $this->transformer->transform($transactionDetail));
 
         if ($segments = $transactionDetail->getSegments()) {
@@ -32,11 +35,6 @@ final class EnrichResponse implements EnrichResponseInterface
             foreach ($segments as $key => $segment) {
                 $response = $response->withHeader($key, $this->transformer->transformSegment($segment));
             }
-        }
-
-        if ($throwable = $transactionDetail->getThrowable()) {
-            $throwableData = $this->transformer->transformThrowable($throwable);
-            $response->withHeader(self::ERROR_RR_REPORTING, $throwableData);
         }
 
         return $response;
