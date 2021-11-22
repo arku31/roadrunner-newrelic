@@ -6,7 +6,7 @@ namespace Arku\Newrelic\Response;
 
 use Arku\Newrelic\Transactions\TransactionDetailInterface;
 use Arku\Newrelic\Transformers\TransactionDetailTransformerInterface;
-use Psr\Http\Message\MessageInterface;
+use Psr\Http\Message\ResponseInterface;
 
 final class EnrichResponse implements EnrichResponseInterface
 {
@@ -19,7 +19,7 @@ final class EnrichResponse implements EnrichResponseInterface
         $this->transformer = $transformer;
     }
 
-    public function enrich(MessageInterface $response, TransactionDetailInterface $transactionDetail): MessageInterface
+    public function enrich(ResponseInterface $response, TransactionDetailInterface $transactionDetail): ResponseInterface
     {
         if ($throwable = $transactionDetail->getThrowable()) {
             $throwableData = $this->transformer->transformThrowable($throwable);
