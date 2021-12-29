@@ -1,4 +1,4 @@
-#Response enricher for the newrelic implementation in the roadrunner
+# Response enricher for the newrelic implementation in the roadrunner
 
 
 Usage
@@ -19,4 +19,9 @@ Usage
     $response = $enricher->enrich($response, $transactionDetail);
 
 
-## Note: Duration tracking is not available atm due to restriction of the newrelic golang library. 
+## Note: Duration tracking is not available atm due to restriction of the newrelic golang library.
+
+
+### License: MIT
+
+See https://github.com/arku31/newrelic-roadrunner-sample for example
