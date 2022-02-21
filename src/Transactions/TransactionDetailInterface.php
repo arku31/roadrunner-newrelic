@@ -22,4 +22,6 @@ interface TransactionDetailInterface
     public function setThrowable(Throwable $throwable): self;
     public function getThrowable(): ?Throwable;
 
+    public function isIgnored(): bool;
+    public function ignoreTransaction(): TransactionDetailInterface;
 }

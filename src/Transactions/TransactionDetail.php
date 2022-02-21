@@ -11,11 +11,13 @@ final class TransactionDetail implements TransactionDetailInterface
     private array $data;
     private array $segments = [];
     private ?Throwable $throwable = null;
+    private bool $isIgnored = false;
 
     public function __construct(array $data = [])
     {
         $this->data = $data;
     }
+
 
     public function setName(string $name): self
     {
@@ -62,4 +64,14 @@ final class TransactionDetail implements TransactionDetailInterface
         return $this->throwable;
     }
 
+    public function isIgnored(): bool
+    {
+        return $this->isIgnored;
+    }
+
+    public function ignoreTransaction(): TransactionDetailInterface
+    {
+        $this->isIgnored = true;
+        return $this;
+    }
 }

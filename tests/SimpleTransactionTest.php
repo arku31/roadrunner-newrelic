@@ -45,4 +45,33 @@ final class SimpleTransactionTest extends TestCase
             'testmetakey:testmetavalue'
         ], $headers['nr_segment1']);
     }
+
+    public function testIgnored()
+    {
+        $response = new Response();
+        $transactionDetail = new TransactionDetail();
+        $transactionDetail->ignoreTransaction();
+        $enricher = new EnrichResponse(new TransactionDetailTransformer());
+        $response = $enricher->enrich($response, $transactionDetail);
+        $this->assertArrayHasKey('rr_newrelic_ignore', $response->getHeaders());
+        $this->assertEquals(['true'], $response->getHeaders()['rr_newrelic_ignore']);
+    }
+
+    public function testNotIgnored()
+    {
+        $response = new Response();
+        $transactionDetail = new TransactionDetail();
+        $enricher = new EnrichResponse(new TransactionDetailTransformer());
+        $response = $enricher->enrich($response, $transactionDetail);
+        $this->assertArrayNotHasKey('rr_newrelic_ignore', $response->getHeaders());
+    }
+
+    public function testEmptyDetails()
+    {
+        $originalResponse = new Response();
+        $transactionDetail = new TransactionDetail();
+        $enricher = new EnrichResponse(new TransactionDetailTransformer());
+        $response = $enricher->enrich($originalResponse, $transactionDetail);
+        $this->assertEquals($response, $response);
+    }
 }

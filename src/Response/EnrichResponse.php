@@ -21,12 +21,20 @@ final class EnrichResponse implements EnrichResponseInterface
 
     public function enrich(ResponseInterface $response, TransactionDetailInterface $transactionDetail): ResponseInterface
     {
+        if ($transactionDetail->isIgnored() === true) {
+            return $response->withHeader(self::IGNORE_RR_TRANSACTION, 'true');
+        }
+
         if ($throwable = $transactionDetail->getThrowable()) {
             $throwableData = $this->transformer->transformThrowable($throwable);
             return $response->withHeader(self::ERROR_RR_REPORTING, $throwableData);
         }
 
-        $response =  $response->withHeader(self::MAIN_RR_HEADER, $this->transformer->transform($transactionDetail));
+        $transformedHeaders = $this->transformer->transform($transactionDetail);
+        if (empty($transformedHeaders)) {
+            return $response;
+        }
+        $response =  $response->withHeader(self::MAIN_RR_HEADER, $transformedHeaders);
 
         if ($segments = $transactionDetail->getSegments()) {
             $keys = $this->generateKeys(count($segments));

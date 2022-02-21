@@ -10,6 +10,7 @@ interface EnrichResponseInterface
     public const MAIN_RR_HEADER = 'rr_newrelic';
     public const SEGMENTS_RR_HEADER = 'rr_newrelic_headers';
     public const ERROR_RR_REPORTING = 'rr_newrelic_error';
+    public const IGNORE_RR_TRANSACTION = 'rr_newrelic_ignore';
 
     public function enrich(ResponseInterface $response, TransactionDetail $transactionDetail): ResponseInterface;
 }
